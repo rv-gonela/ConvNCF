@@ -267,14 +267,14 @@ class ConvNCF:
         aq = tf.assign(self.embedding_Q, ps[1])
         #ah = tf.assign(self.h, np.diag(ps[2][:,0]).reshape(4096,1))
         sess.run([ap,aq])
-        print "parameter loaded"
+        print ("parameter loaded")
 
     def load_parameter_logloss(self, sess, path):
         ps = np.load(path).tolist()
         ap = tf.assign(self.embedding_P, ps['P'])
         aq = tf.assign(self.embedding_Q, ps['Q'])
         sess.run([ap,aq])
-        print "logloss parameter loaded"
+        print ("logloss parameter loaded")
 
     def save_net_parameters(self, sess, path):
         pass
@@ -291,7 +291,7 @@ def dxyeval(sess, model, dataset):
     eval_feed_dicts = init_eval_model(model, dataset)
     hr, ndcg, auc, train_auc = evaluate(model, sess, dataset, eval_feed_dicts)
     res = "Epoch: HR = %.4f, NDCG = %.4f AUC = %.4f train_AUC = %.4f" % (hr, ndcg, auc, train_auc)
-    print res
+    print (res)
 
 #---------- training -------
 
@@ -327,7 +327,7 @@ def training(model, dataset, args, saver = None): # saver is an object to save p
 
         # train by epoch
         for epoch_count in range(args.epochs):
-            print "start epoch", epoch_count
+            print ("start epoch", epoch_count)
             # initialize for training batches
             batch_begin = time()
             batches = shuffle(samples, args.batch_size, dataset, model)
@@ -341,7 +341,7 @@ def training(model, dataset, args, saver = None): # saver is an object to save p
             train_batches = training_batch(model, sess, batches)
             train_time = time() - train_begin
 
-            print "batch cost:", batch_time, 'train cost:', train_time
+            print ("batch cost:", batch_time, 'train cost:', train_time)
             if epoch_count % args.verbose == 0:
                 _, ndcg, cur_res = output_evaluate(model, sess, dataset, train_batches, eval_feed_dicts,
                                 epoch_count, batch_time, train_time, prev_acc)
@@ -351,9 +351,9 @@ def training(model, dataset, args, saver = None): # saver is an object to save p
                     max_ndcg = ndcg
                     max_res = cur_res
                     saver_ckpt.save(sess, ckpt_save_path+ckpt_save_file, global_step=epoch_count)
-                    print "saved best", epoch_count
+                    print ("saved best", epoch_count)
 
-        print "best:" + max_res
+        print ("best:" + max_res)
         logging.info("best:" + max_res)
 
 
@@ -371,7 +371,7 @@ def output_evaluate(model, sess, dataset, train_batches, eval_feed_dicts, epoch_
                     hr, ndcg, auc, train_auc, eval_time, prev_acc, train_loss, post_acc, loss_time)
 
     logging.info(res)
-    print res
+    print (res)
 
     return post_acc, ndcg, res
 
@@ -476,7 +476,7 @@ def evaluate(model, sess, dataset, feed_dicts):
         res.append(_eval_by_user(user))
     res = np.array(res)
     result = (res.mean(axis = 0)).tolist()
-    print result
+    print (result)
 
     hr, ndcg, auc, train_auc = result[3:6] + [0]
 
@@ -512,7 +512,7 @@ def _eval_by_user(user):
 
     nan_pos = np.argwhere(np.isnan(predictions))
     if len(nan_pos) > 0:
-        print "contain nan", nan_pos
+        print ("contain nan", nan_pos)
         exit()
     neg_predict, pos_predict = predictions[:-1], predictions[-1]
     position = (neg_predict >= pos_predict).sum()
@@ -532,17 +532,17 @@ def init_logging(args):
         args.dataset, args.embed_size, regs[0], regs[1],strftime('%Y_%m_%d_%H_%M_%S', localtime()))
     logging.basicConfig(filename=fpath,
                         level=logging.INFO)
-    print "log to", fpath
+    print ("log to", fpath)
     logging.info("begin training %s model ......" % args.model)
     logging.info("dataset:%s  embedding_size:%d   dns:%d    batch_size:%d"
                  % (args.dataset, args.embed_size, args.dns, args.batch_size))
-    print "dataset:%s  embedding_size:%d   dns:%d   batch_szie:%d" \
-                 % (args.dataset, args.embed_size, args.dns, args.batch_size)
+    print ("dataset:%s  embedding_size:%d   dns:%d   batch_szie:%d" \
+                 % (args.dataset, args.embed_size, args.dns, args.batch_size))
     logging.info("regs:%.8f, %.8f  learning_rate:(%.4f, %.4f)"
                  % (regs[0], regs[1], args.lr_embed, args.lr_net))
-    print "regs:%.8f, %.8f  learning_rate:(%.4f, %.4f)" \
-                 % (regs[0], regs[1], args.lr_embed, args.lr_net)
-    print str(args)
+    print ("regs:%.8f, %.8f  learning_rate:(%.4f, %.4f)" \
+                 % (regs[0], regs[1], args.lr_embed, args.lr_net))
+    print (str(args))
     logging.info(str(args))
 
 if __name__ == '__main__':
