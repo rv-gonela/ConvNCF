@@ -427,7 +427,7 @@ def init_logging(args):
         args.dataset, args.embed_size, regs[0], regs[1],strftime('%Y_%m_%d_%H_%M_%S', localtime()))
     logging.basicConfig(filename=fpath,
                         level=logging.INFO)
-    print ("log to", fpath))
+    print ("log to", fpath)
     logging.info("begin training %s model ......" % args.model)
     logging.info("dataset:%s  embedding_size:%d   dns:%d    batch_size:%d"
                  % (args.dataset, args.embed_size, args.dns, args.batch_size))
