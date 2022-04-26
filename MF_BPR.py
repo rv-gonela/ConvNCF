@@ -182,7 +182,7 @@ class GMF:
         aq = tf.assign(self.embedding_Q, ps[1])
         #ah = tf.assign(self.h, np.diag(ps[2][:, 0]).reshape(4096, 1))
         sess.run([ap, aq])
-        print "parameter loaded"
+        print ("parameter loaded")
 
 #---------- training process -------
 
@@ -208,12 +208,12 @@ def training(model, dataset, args, saver = None): # saver is an object to save p
             if ckpt and ckpt.model_checkpoint_path:
                 saver_ckpt.restore(sess, ckpt.model_checkpoint_path)
                 logging.info("using pretrained variables")
-                print "using pretrained variables"
+                print ("using pretrained variables")
 
         # initialize the weights
         else:
             logging.info("initialized")
-            print "initialized"
+            print ("initialized")
 
         # initialize for Evaluate
         eval_feed_dicts = init_eval_model(model, dataset)
@@ -257,7 +257,7 @@ def training(model, dataset, args, saver = None): # saver is an object to save p
                 saver_ckpt.save(sess, ckpt_save_path+'weights', global_step=epoch_count)
 
         model.saveParams(sess, "final_%s_MF_%f.npy" % (args.dataset, time()))
-        print "best:" + max_res
+        print ("best:" + max_res)
         logging.info("best:" + max_res)
 
 
@@ -332,7 +332,7 @@ def output_evaluate(model, sess, dataset, train_batches, eval_feed_dicts, epoch_
     # res = "Epoch %d [%.1fs + %.1fs]: HR = %.4f, NDCG = %.4f AUC = %.4f [%.1fs]" % (epoch_count, batch_time, train_time, hr, ndcg, auc, eval_time)
 
     logging.info(res)
-    print res
+    print (res)
 
     return post_acc, ndcg, res
 
@@ -427,17 +427,17 @@ def init_logging(args):
         args.dataset, args.embed_size, regs[0], regs[1],strftime('%Y_%m_%d_%H_%M_%S', localtime()))
     logging.basicConfig(filename=fpath,
                         level=logging.INFO)
-    print "log to", fpath
+    print ("log to", fpath))
     logging.info("begin training %s model ......" % args.model)
     logging.info("dataset:%s  embedding_size:%d   dns:%d    batch_size:%d"
                  % (args.dataset, args.embed_size, args.dns, args.batch_size))
-    print "dataset:%s  embedding_size:%d   dns:%d   batch_szie:%d" \
-                 % (args.dataset, args.embed_size, args.dns, args.batch_size)
+    print ("dataset:%s  embedding_size:%d   dns:%d   batch_szie:%d" \
+                 % (args.dataset, args.embed_size, args.dns, args.batch_size))
     logging.info("regs:%.8f, %.8f  learning_rate:%.4f"
                  % (regs[0], regs[1], args.lr))
-    print "regs:%.8f, %.8f  learning_rate:%.4f" \
-                 % (regs[0], regs[1], args.lr)
-    print str(args)
+    print ("regs:%.8f, %.8f  learning_rate:%.4f" \
+                 % (regs[0], regs[1], args.lr))
+    print (str(args))
     logging.info(str(args))
 
 if __name__ == '__main__':
